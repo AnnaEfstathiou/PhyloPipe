@@ -1,3 +1,5 @@
+""" Visualizing Phylogenetic Tree """
+
 import argparse
 import seaborn as sns
 import matplotlib.pyplot as plt
@@ -11,8 +13,10 @@ def parse_args():
     parser.add_argument('-f', '--mapping_file', type=str, help='Input a leaf:category mapping file.')
     parser.add_argument('-p', '--palette', type=str, help='Input a seaborn palette name or path to the palette file.')
     parser.add_argument('-title', '--tree_title', type=str, help='Title of the tree.')
-    parser.add_argument('-png', '--save_png', type=str, nargs='?', default='Tree.png', help='Optional output filename for the PNG file. If -png is used without a value, uses default name.')
-    parser.add_argument('-svg', '--save_svg', type=str, nargs='?', default='Tree.svg', help='Optional output filename for the SVG file. If -svg is used without a value, uses default name.')
+    # parser.add_argument('-png', '--save_png', type=str, nargs='?', default='Tree.png', help='Optional output filename for the PNG file. If -png is used without a value, uses default name.')
+    # parser.add_argument('-svg', '--save_svg', type=str, nargs='?', default='Tree.svg', help='Optional output filename for the SVG file. If -svg is used without a value, uses default name.')
+    parser.add_argument('-png', '--save_png', type=str, help='Optional save as a PNG file.')
+    parser.add_argument('-svg', '--save_svg', type=str, help='Optional save as a SVG file.')
     # action parsers
     parser.add_argument('-circ', '--circular_tree', action="store_true", help='Create a circular tree (default:rectangular).')
     parser.add_argument('-r', '--rotate_tree', action="store_true", help="Draw a rectangular tree from top to bottom")
@@ -120,8 +124,8 @@ def main():
     # Add title if provided
     if args.tree_title:
         # Adjust font size based on tree mode
-        fsize = 50 if args.circular_tree else 30
-        tree_title = TextFace(" " * 20 + args.tree_title, fsize=fsize)
+        fsize = 50 if args.circular_tree else 20
+        tree_title = TextFace(" " * 0 + args.tree_title, fsize=fsize)
         ts.title.add_face(tree_title, column=0)
 
     # Apply rotation for rectangular tree mode if specified
@@ -144,15 +148,13 @@ def main():
 
  
     # Save or show the tree
-    # if args.save_png is None and args.save_svg is None:
-    #     tree.show(tree_style=ts)
-    # elif args.save_png:
-    #     tree.render("mytree.png", tree_style=ts)
-    # elif args.save_svg:
-    #     tree.render("mytree.svg", tree_style=ts)
-    # else:
-    #     tree.show(tree_style=ts)
-    tree.show(tree_style=ts)
+    if args.save_png:
+        tree.render(args.save_png, tree_style=ts)
+    elif args.save_svg:
+        tree.render(args.save_svg, tree_style=ts)
+    else:
+        tree.show(tree_style=ts)
+
 
 if __name__ == '__main__':
     main()
